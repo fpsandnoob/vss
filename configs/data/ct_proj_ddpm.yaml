@@ -1,0 +1,8 @@
+_target_: src.data.ct_proj_datamodule.CTDDPMDataModule
+# data_dir: ${paths.data_dir}
+# data_dir: ${paths.data_dir}/fanbeam/fd.tif
+data_dir: /home/ch4090/hlc/git/helix2fan/out_fd/scan_001_flat_fan_projections.tif
+batch_size: 1
+num_workers: 1
+pin_memory: False
+resolution: 512

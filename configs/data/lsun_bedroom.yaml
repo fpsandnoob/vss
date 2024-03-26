@@ -1,0 +1,7 @@
+_target_: src.data.lsun_datamodule.LSUNDDPMDataModule
+# data_dir: ${paths.data_dir}
+data_dir: ${paths.data_dir}/lsun
+batch_size: 1
+num_workers: 8
+pin_memory: True
+resolution: 256

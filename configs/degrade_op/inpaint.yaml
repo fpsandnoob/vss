@@ -1,0 +1,3 @@
+_target_: src.models.components.measurement_ops.CenterBoxInpaintingOP
+im_size: 256
+box_size: 128

@@ -1,0 +1,6 @@
+_target_: src.models.components.measurement_ops.CTSparseViewFanBeamOp
+metadata_path: ${paths.data_dir}/fanbeam/scan_001_flat_fan_projections.tif
+num_views: 32
+image_size: 512
+voxel_size: 0.7
+fbp_filter: "hann"

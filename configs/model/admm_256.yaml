@@ -1,0 +1,5 @@
+_target_: src.models.pnp_admm_module.EvalModule
+
+guidence_module: ${guidence}
+denoiser_ckpt_path: ${paths.data_dir}/ckpt/pnp_admm/denoiser.pth
+im_out_dir: ${paths.eval_dir}/ni_sr_test

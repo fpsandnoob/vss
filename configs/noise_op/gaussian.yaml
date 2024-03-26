@@ -1,0 +1,5 @@
+_target_: src.models.components.measurement_ops.GaussianNoiseOp
+std: 0.05
+device: "cuda"
+noise_dir: ${paths.data_dir}/noises
+random: False

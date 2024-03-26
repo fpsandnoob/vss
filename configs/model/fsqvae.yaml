@@ -1,0 +1,23 @@
+_target_: src.models.fsq_module.FSQVAEModelLitModule
+
+learning_rate: 5e-5
+lr_g_factor: 0.2
+num_vq_embeddings: 15360
+
+model:
+  _target_: src.models.components.fsq_model.FSQTrainModel
+  in_channels: 1
+  out_channels: 1
+  layers_per_block: 2
+  # down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D"]
+  # up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+  # block_out_channels: [128, 128, 256, 256, 512]
+  down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "AttnDownEncoderBlock2D"]
+  up_block_types: ["AttnUpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+  block_out_channels: [128, 128, 256, 512]
+  latent_channels: 256
+  vq_embed_dim: 8
+  # num_vq_embeddings: 16384
+  fsq_embed_dim: 8
+  levels: [8, 8, 8, 6, 5]
+  num_quantizers: 1

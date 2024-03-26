@@ -1,0 +1,5 @@
+_partial_: true
+_target_: src.models.components.guidence_modules.LatentDDNM
+
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

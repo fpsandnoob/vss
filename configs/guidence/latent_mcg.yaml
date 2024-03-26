@@ -1,0 +1,9 @@
+_partial_: true
+_target_: src.models.components.guidence_modules.LatentManifoldConstraintGradient
+diff_module:
+  _target_: src.models.components.guidence_modules.NormModule
+  ord: 2
+scale: 1
+
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

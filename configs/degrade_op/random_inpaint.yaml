@@ -1,0 +1,4 @@
+_target_: src.models.components.measurement_ops.RandomBoxInpaintingOP
+im_size: 256
+mask_factor: 0.8
+mask_dir: ${paths.data_dir}/masks

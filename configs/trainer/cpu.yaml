@@ -1,0 +1,6 @@
+defaults:
+  - default.yaml
+
+accelerator: cpu
+devices: 1
+inference_mode: false

@@ -1,0 +1,129 @@
+_target_: src.models.unconditional_ldm.LDMLitModule
+
+prediction_type: "epsilon"
+inspection_batch_size: 8
+ddpm_num_inference_steps: 100
+guidance_scale: 7.5
+condition_discard_rate: 0.0
+freeze_vae: True
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 5e-5
+  weight_decay: 1e-6
+  eps: 1e-8
+  # eps: 1e-3
+
+scheduler:
+  _target_: diffusers.optimization.get_scheduler
+  _partial_: true
+  name: 'cosine'
+  num_warmup_steps: 200
+
+gamma_schedule:
+  _target_: src.models.components.conditional_latent_ddpm.SemanticLossSchedule
+  num_train_timesteps: 1000
+  gamma_end: 1.0
+  gamma_start: 0.0
+  gamma_schedule: "linear"
+
+# vae:
+#   _target_: src.models.components.vq_model.AutoencoderKLTrainModel
+#   in_channels: 1
+#   out_channels: 1
+#   layers_per_block: 2
+#   # down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D"]
+#   # up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+#   # block_out_channels: [128, 128, 256, 256, 512]
+#   down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D"]
+#   up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+#   block_out_channels: [64, 128, 256, 256]
+#   latent_channels: 4
+
+vae:
+  _target_: diffusers.models.VQModel
+  in_channels: 1
+  out_channels: 1
+  layers_per_block: 2
+  down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "AttnDownEncoderBlock2D"]
+  up_block_types: ["AttnUpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+  block_out_channels: [128, 128, 256, 512]
+  latent_channels: 4
+  vq_embed_dim: 4
+  num_vq_embeddings: 16384
+
+unet:
+  _target_: diffusers.UNet2DModel
+  sample_size: 32
+  in_channels: 4
+  out_channels: 4
+  layers_per_block: 1
+  # block_out_channels: [128, 256, 256, 512]
+  block_out_channels: [32, 64, 128, 256]
+  center_input_sample: False
+  downsample_padding: 1
+  flip_sin_to_cos: True
+  freq_shift: 0
+  mid_block_scale_factor: 1
+  norm_eps: 1e-5
+  norm_num_groups: 32
+  down_block_types: ["DownBlock2D", "DownBlock2D", "DownBlock2D", "DownBlock2D"]
+  up_block_types: ["UpBlock2D", "UpBlock2D", "UpBlock2D", "UpBlock2D"]
+
+# semantic_loss:
+#   _target_: src.models.components.vq_model_utils.LPIPSwithPixelLoss
+#   pixelloss_weight: 1.0
+#   perceptual_weight: 1.0
+#   perceptual_loss: "lpips"
+#   pixel_loss: "l1"
+
+semantic_loss: null
+
+semantic_loss_weight: 0.0
+# vqmodel:
+#   _target_: src.models.components.vq_model.VQTrainModel
+#   in_channels: 1
+#   out_channels: 1
+#   layers_per_block: 2
+#   # down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D"]
+#   # up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+#   # block_out_channels: [128, 128, 256, 256, 512]
+#   down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D"]
+#   up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D"]
+#   block_out_channels: [128, 256]
+#   latent_channels: 3
+#   vq_embed_dim: 256
+#   num_vq_embeddings: 256
+
+# vqmodel_ckpt_path: /home/ch4090/hlc/project/ct_reconstruction_ddim/logs/train/runs/2023-02-11_23-24-41/checkpoints/epoch_315.ckpt
+
+vae_ckpt_path: /media/ch4090/0b7b7d14-8711-4c54-845e-6e71ba588cf8/ct_reconstruction_ddim/logs/vqvae/runs/2023-03-03_12-48-53/checkpoints/epoch_241.ckpt
+
+
+train_noise_scheduler:
+  _target_: diffusers.DDPMScheduler
+  num_train_timesteps: 1000
+  beta_schedule: "linear"
+  prediction_type: ${model.prediction_type}
+
+# train_noise_scheduler:
+  # _target_: src.models.components.conditional_latent_ddpm.PatchedDDPMScheduler
+  # num_train_timesteps: 1000
+  # beta_schedule: "linear"
+  # prediction_type: ${model.prediction_type}
+
+# inference_noise_scheduler:
+#   _target_: diffusers.DDIMScheduler
+#   num_train_timesteps: 1000
+#   beta_schedule: "linear"
+#   prediction_type: ${model.prediction_type}
+
+inference_noise_scheduler:
+  _target_: diffusers.DPMSolverMultistepScheduler
+  num_train_timesteps: 1000
+  beta_schedule: "linear"
+  solver_order: 3
+  algorithm_type: "dpmsolver++"
+  thresholding: True
+  prediction_type: ${model.prediction_type}

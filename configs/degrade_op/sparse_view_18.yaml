@@ -1,0 +1,13 @@
+_target_: src.models.components.measurement_ops.CTSparseViewOp
+num_views: 18
+det_shape: [512,]
+im_shape: [256, 256]
+angles: 3.1415926536 # 180 degrees
+# angles: 1.5707963268 # 90 degrees
+# angles: 0.7853981634 # 45 degrees
+
+# _target_: src.models.components.measurement_ops.CTSparseViewParallelBeamOp
+# num_views: 18
+# det_count: 512
+# im_size: 256
+# fbp_filter: 'ram-lak'

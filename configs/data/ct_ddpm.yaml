@@ -1,0 +1,7 @@
+_target_: src.data.ct_datamodule.CTDDPMDataModule
+# data_dir: ${paths.data_dir}
+data_dir: ${paths.data_dir}/dose
+batch_size: 1
+num_workers: 8
+pin_memory: True
+resolution: 128

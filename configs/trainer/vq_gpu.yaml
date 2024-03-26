@@ -1,0 +1,17 @@
+defaults:
+  - default.yaml
+
+accelerator: gpu
+devices: 1
+num_sanity_val_steps: 1
+benchmark: True
+deterministic: False
+# accumulate_grad_batches: 4
+# precision: "16-mixed"
+log_every_n_steps: 1
+# plugins:
+  # _target_: pytorch_lightning.plugins.precision.ApexMixedPrecisionPlugin
+
+callbacks:
+    - _target_: src.models.components.ema.EMA
+      decay: 0.999

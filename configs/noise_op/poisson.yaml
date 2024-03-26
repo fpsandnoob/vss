@@ -1,0 +1,3 @@
+_target_: src.models.components.measurement_ops.PoissonNoiseOp
+rate: 1e5
+device: "cuda"

@@ -1,0 +1,3 @@
+_target_: src.models.components.measurement_ops.QuantizerOperator
+num_bits: 1
+device: 'cuda'

@@ -1,0 +1,22 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /guidence: pixel_dps.yaml
+  - override /degrade_op: sparse_view_32_fanbeam.yaml
+  - override /data: ct_ddpm.yaml
+  - override /model: mayo_recon_256.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["eval", "ni", "sr_test"]
+
+seed: 3614
+
+data:
+  pin_memory: False
+  resolution: 512

@@ -1,0 +1,5 @@
+defaults:
+  - latent_dlir.yaml
+
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

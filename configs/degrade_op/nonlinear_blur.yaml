@@ -1,0 +1,3 @@
+_target_: src.models.components.measurement_ops.NonlinearBlurOp
+opt_yaml_path: ./bkse/options/generate_blur/default.yml
+device: 'cuda'

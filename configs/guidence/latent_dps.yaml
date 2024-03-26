@@ -1,0 +1,6 @@
+_partial_: true
+_target_: src.models.components.guidence_modules.LatentPosteriorSampling
+
+scale: 1
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

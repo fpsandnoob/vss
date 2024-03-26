@@ -1,0 +1,11 @@
+_target_: src.models.components.guidence_modules.PixelDeepLatentIterativeReconstruct
+scale: 5 # 2 for 0.01 adam 1 for 0.01 adam
+optimizer:
+  _target_: src.models.components.guidence_modules.SGDOptimizer
+diff_module:
+  _target_: src.models.components.guidence_modules.NormModule
+  ord: 2
+  # _target_:
+
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

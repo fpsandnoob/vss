@@ -1,0 +1,23 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - data: mnist.yaml # choose datamodule with `test_dataloader()` for evaluation
+  - model: mnist.yaml
+  - callbacks: model_summary.yaml
+  - logger: null
+  - trainer: default.yaml
+  - paths: default.yaml
+  - extras: default.yaml
+  - hydra: default.yaml
+  - degrade_op: default.yaml
+  - noise_op: default.yaml
+  - guidence: default.yaml
+  - experiment: default.yaml
+
+task_name: "eval"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+# ckpt_path: ???

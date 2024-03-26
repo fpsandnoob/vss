@@ -1,0 +1,4 @@
+_target_: src.models.components.guidence_modules.PixelDDNM
+
+degrade_op: ${degrade_op}
+noise_op: ${noise_op}

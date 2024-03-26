@@ -1,0 +1,5 @@
+_target_: src.models.mayo_recon_module.EvalModule
+
+guidence_module: ${guidence}
+im_out_dir: ${paths.eval_dir}/ni_sr_test
+recon_module: fbp

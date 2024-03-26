@@ -1,0 +1,33 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /guidence: latent_dlir.yaml
+  - override /degrade_op: sparse_view_32.yaml
+  - override /data: ct_ddpm.yaml
+  - override /model: ldm_reddiff_mayo_256.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["eval", "ni", "sr_test"]
+
+seed: 114514
+
+data:
+  pin_memory: False
+  resolution: 256
+
+guidence:
+  _target_: src.models.components.guidence_modules.LatentDeepLatentIterativeReconstruct
+  # src.models.components.guidence_modules.LatentDeepLatentIterativeReconstructEnsembler
+  scale: 0.1
+  optimizer:
+    _target_: src.models.components.guidence_modules.AdamOptimizer
+    # _target_: src.models.components.guidence_modules.MomentumOptimizer
+  diff_module:
+    _target_: src.models.components.guidence_modules.NormModule
+    ord: 2

@@ -1,0 +1,2 @@
+_target_: src.models.components.measurement_ops.SuperResolutionOp
+scale_factor: 8
