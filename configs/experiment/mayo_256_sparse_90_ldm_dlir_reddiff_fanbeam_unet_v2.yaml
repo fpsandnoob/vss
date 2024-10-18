@@ -1,0 +1,36 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /guidance: latent_dlir_v2.yaml
+  - override /degrade_op: sparse_view_32_v2.yaml
+  - override /data: ct_ddpm.yaml
+  - override /model: UNET_VQ_MAYO_256_EPS_v2.yaml
+  - override /trainer: gpu.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["eval", "ni", "sr_test"]
+
+seed: 114514
+
+data:
+  pin_memory: False
+  resolution: 256
+
+degrade_op:
+  num_views: 90
+
+guidance:
+  _target_: src.models.components.guidance_module.LatentDeepLatentIterativeReconstruct
+  # src.models.components.guidence_modules.LatentDeepLatentIterativeReconstructEnsembler
+  scale: 0.05
+  optimizer:
+    _target_: src.models.components.guidance_module.AdamOptimizer
+    # _target_: src.models.components.guidance_module.MomentumOptimizer
+  diff_module:
+    _target_: src.models.components.guidance_module.NormModule
+    ord: 2

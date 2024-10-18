@@ -9,6 +9,8 @@
 <!-- [![Paper](http://img.shields.io/badge/paper-arxiv.1001.2234-B31B1B.svg)](https://www.nature.com/articles/nature14539)
 [![Conference](http://img.shields.io/badge/AnyConference-year-4b44ce.svg)](https://papers.nips.cc/paper/2020) -->
 
+[IEEE Transactions on Medical Imaging](https://ieeexplore.ieee.org/document/10706876) | [BibTex](#bibtex)
+
 </div>
 
 ## Abstract
@@ -18,13 +20,19 @@ Computed tomography (CT) stands as a ubiquitous medical diagnostic tool. Nonethe
     <img src="figures/fig_framework.png" style="background-color:white;padding:10px">
 </p>
 
+## Updates
+
+### 2024-10
+
+We update the codebase to the latest version of our paper. We now provide a new checkpoint for the LDM model trained on 256x256 Mayo dataset. This new checkpoint can achieve better reconstruction results. ([Google Drive](https://drive.google.com/file/d/1qmSapjncKtyQLjC20YWH02NaA-YWsqhJ/view?usp=sharing))
+
 ## Installation
 
 #### Pip
 
 * Pytorch >= 2.0
-* Diffusers == 0.15.1
-* Transformers == 4.35.2
+* Diffusers == 0.27.2
+* Transformers == 4.37.2
 * [Operator Discretization Library (ODL)](https://github.com/odlgroup/odl)
 * [Torch-radon](https://github.com/matteo-ronchetti/torch-radon) (Need to be patched. Patch in: [Helix2fan](https://github.com/faebstn96/helix2fan))
 
@@ -47,10 +55,12 @@ pip install -r requirements.txt
 ## Data
 
 #### Model Checkpoint
-From this [link](https://drive.google.com/file/d/14BwMCOtFpREKjY1GqNcrvlrRbvOhhbVo/view?usp=sharing), download the checkpoints (including DDPM and LDM for 256, LDM for 512) and unzip them to ''data/ckpt'' directory.
+From this [Google Drive](https://drive.google.com/file/d/1qmSapjncKtyQLjC20YWH02NaA-YWsqhJ/view?usp=sharing), download the  256x256 LDM checkpoint and put it in ''data/ckpt'' directory.
+
+From this [Google Drive](https://drive.google.com/file/d/14BwMCOtFpREKjY1GqNcrvlrRbvOhhbVo/view?usp=sharing), download the checkpoints (including DDPM for 256x256, LDM for 512x512) and unzip them to ''data/ckpt'' directory. (These checkpoints are used for comparison).
 
 #### Preprocessed Data
-From this [link](https://drive.google.com/file/d/1hZuEn_y_BYPWvjGN2QeyP99JICe7pNtL/view?usp=drive_link), download the preprocessed data and unzip them to ''data/dose'' directory.
+From this [Google Drive](https://drive.google.com/file/d/1hZuEn_y_BYPWvjGN2QeyP99JICe7pNtL/view?usp=drive_link), download the preprocessed data and unzip them to ''data/dose'' directory.
 
 <!-- #### Conda
 
@@ -70,25 +80,31 @@ conda activate myenv
 
 You can run VSS like this
 
-```bash
+<!-- ```bash
 # train on CPU
 python src/eval.py experiment=mayo_256_sparse_18_ldm_dlir_reddiff model.im_out_dir=eval_data/mayo_sparse_view_18_vss
 python src/eval.py experiment=mayo_256_sparse_32_ldm_dlir_reddiff model.im_out_dir=eval_data/mayo_sparse_view_32_vss
 python src/eval.py experiment=mayo_256_sparse_64_ldm_dlir_reddiff model.im_out_dir=eval_data/mayo_sparse_view_64_vss
+``` -->
+
+```bash
+# Evaluate on GPU
+python src/eval.py experiment=mayo_256_sparse_90_ldm_dlir_reddiff_fanbeam_unet_v2 model.im_out_dir=eval_data/mayo_sparse_view_90_vss
 ```
 
 or you can create your own inference config in ''configs/experiment''
 ```yaml
-# @package _global_
+## @package _global_
 
 # to execute this experiment run:
 # python train.py experiment=example
 
 defaults:
-  - override /guidence: latent_dlir.yaml
-  - override /degrade_op: sparse_view_64.yaml
+  - override /guidance: latent_dlir_v2.yaml
+  - override /degrade_op: sparse_view_32_v2.yaml
+  # - override /degrade_op: sparse_view_32_fanbeam_v2.yaml you can choose different imaging geometry
   - override /data: ct_ddpm.yaml
-  - override /model: ldm_reddiff_mayo_512.yaml
+  - override /model: UNET_VQ_MAYO_256_EPS_v2.yaml
   - override /trainer: gpu.yaml
 
 # all parameters below will be merged with parameters from default configurations set above
@@ -96,25 +112,36 @@ defaults:
 
 tags: ["eval", "ni", "sr_test"]
 
-seed: 3614
+seed: 114514
 
 data:
   pin_memory: False
-  resolution: 512
+  resolution: 256
 
 degrade_op:
-  im_shape: [512, 512]
+  num_views: 90
 
-guidence:
-  _target_: src.models.components.guidence_modules.LatentDeepLatentIterativeReconstruct
+guidance:
+  _target_: src.models.components.guidance_module.LatentDeepLatentIterativeReconstruct
   # src.models.components.guidence_modules.LatentDeepLatentIterativeReconstructEnsembler
-  scale: 0.1
+  scale: 0.05
   optimizer:
-    _target_: src.models.components.guidence_modules.AdamOptimizer
-    # _target_: src.models.components.guidence_modules.SGDOptimizer
-    # _target_: src.models.components.guidence_modules.MomentumOptimizer
+    _target_: src.models.components.guidance_module.AdamOptimizer
+    # _target_: src.models.components.guidance_module.MomentumOptimizer
   diff_module:
-    _target_: src.models.components.guidence_modules.NormModule
+    _target_: src.models.components.guidance_module.NormModule
     ord: 2
   
+```
+
+## BibTex
+
+```
+@article{he2024solving,
+  title={Solving Zero-Shot Sparse-View CT Reconstruction With Variational Score Solver},
+  author={He, Linchao and Du, Wenchao and Liao, Peixi and Fan, Fenglei and Chen, Hu and Yang, Hongyu and Zhang, Yi},
+  journal={IEEE Transactions on Medical Imaging},
+  year={2024},
+  publisher={IEEE}
+}
 ```

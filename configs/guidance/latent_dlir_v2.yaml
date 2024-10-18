@@ -1,0 +1,12 @@
+_partial_: true
+_target_: src.models.components.guidance_module.LatentDeepLatentIterativeReconstruct
+scale: 0.05
+optimizer:
+  _target_: src.models.components.guidance_module.AdamOptimizer
+  # etas: [0.9, 0.999]
+  # varepsilon: 1e-8
+diff_module:
+  _target_: src.models.components.guidance_module.NormModule
+  # ord: 2
+
+degrade_op: ${degrade_op}

@@ -9,8 +9,11 @@ from torchvision.transforms import transforms
 class MayoCTData(Dataset):
     val_name = 'L333'
     test_name = 'L506'
-    max_val = 3200
-    min_val = -2048
+    # max_val = 3200
+    # min_val = -2048
+    
+    max_val = 3096
+    min_val = -1000
     
     # max_val = 3072
     # min_val = -1024

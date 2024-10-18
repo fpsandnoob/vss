@@ -3,6 +3,4 @@ defaults:
 
 accelerator: gpu
 devices: 1
-benchmark: True
-deterministic: False
-# precision: 16
+

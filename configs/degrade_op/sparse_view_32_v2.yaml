@@ -1,0 +1,6 @@
+_target_: src.models.components.measurement_op.CTSparseViewOp
+num_views: 32
+det_shape: [512,]
+im_shape: [256, 256]
+angles: 3.1415926536 # 180 degrees
+filter_type: hann

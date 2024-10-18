@@ -12,7 +12,7 @@ defaults:
   - hydra: default.yaml
   - degrade_op: default.yaml
   - noise_op: default.yaml
-  - guidence: default.yaml
+  - guidance: default.yaml
   - experiment: default.yaml
 
 task_name: "eval"
