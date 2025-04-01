@@ -50,6 +50,7 @@ conda activate myenv
 
 # install requirements
 pip install -r requirements.txt
+pip install git+https://github.com/fpsandnoob/vector-quantize-pytorch.git
 ```
 
 ## Data
